@@ -256,6 +256,7 @@
   (map! :desc "Hyperbole Action" :ne "SPC <return>" #'action-key)
   )
 
+(after! projectile (setq projectile-project-root-files-bottom-up (remove ".git" projectile-project-root-files-bottom-up)))
 ;; ;; org-config
 (after! org
   (org-link-set-parameters "yt" #'make-youtube-link)
@@ -275,18 +276,27 @@
                                (?D)
                                (?E)
                                (?F))
+
+
         )
-  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+
+
+  (add-hook 'org-mode-hook #'org-latex-preview-auto-mode)
   ;;(add-hook 'org-mode-hook 'global-prettify-symbols-mode)
   (add-hook 'org-mode-hook '+org-pretty-mode)
+  (add-hook 'org-mode-hook 'company-mode)
+  (defun add-pcomplete-to-capf ()
+    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+
+  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
   ;; (setq org-latex-preview-auto-generate 'live
   ;;       org-latex-preview-debounce 0.2
   ;;       org-latex-preview-throttle 0.2)
 
-
   ;; ================= XOURNAL START =====================
 
 
+  (plist-put org-format-latex-options :scale 1.5)
 
   ;; move to !after org
   ;; Org Notebook
@@ -459,7 +469,6 @@
 
 
 
-
 ;; (use-package! org-latex-preview
 ;;   :config
 ;; (defun org-latex-svg--make-preview-fg-currentColor (svg-fragment)
@@ -553,22 +562,22 @@
   :config
   (setq laas-enable-auto-space nil)
   (aas-set-snippets 'laas-mode
-    "mke" (lambda ()
-            (interactive)
-            (yas-expand-snippet "\\\\($0\\\\)"))
-    "dke" (lambda ()
-            (interactive)
-            (yas-expand-snippet  "\\begin{equation*}\n$0\n\\end{equation*}"))
-    "td" (lambda ()
-           (interactive)
-           (if (laas-mathp)
-               (yas-expand-snippet "^\\{$0}")
-             (yas-expand-snippet "td")))
-    "PP" (lambda ()
-           (interactive)
-           (if (laas-mathp)
-               (yas-expand-snippet "\\mathbb{P}($0)")
-             (yas-expand-snippet "PP")))))
+                    "mke" (lambda ()
+                            (interactive)
+                            (yas-expand-snippet "\\\\($0\\\\)"))
+                    "dke" (lambda ()
+                            (interactive)
+                            (yas-expand-snippet  "\\begin{equation*}\n$0\n\\end{equation*}"))
+                    "td" (lambda ()
+                           (interactive)
+                           (if (laas-mathp)
+                               (yas-expand-snippet "^\\{$0}")
+                             (yas-expand-snippet "td")))
+                    "PP" (lambda ()
+                           (interactive)
+                           (if (laas-mathp)
+                               (yas-expand-snippet "\\mathbb{P}($0)")
+                             (yas-expand-snippet "PP")))))
 
 
 ;; copied from reddit, tab autocomplete
@@ -597,10 +606,10 @@
     ;; functionality when the user has not explicitly interacted with
     ;; Company.
     (define-key company-active-map (kbd key)
-      `(menu-item nil company-complete
-        :filter ,(lambda (cmd)
-                   (when (company-explicit-action-p)
-                     cmd)))))
+                `(menu-item nil company-complete
+                  :filter ,(lambda (cmd)
+                             (when (company-explicit-action-p)
+                               cmd)))))
   ;; (define-key company-active-map (kbd "TAB") #'company-complete-selection)
   (map! :map company-active-map "TAB" #'company-complete-selection)
   (map! :map company-active-map "<tab>" #'company-complete-selection)
@@ -610,3 +619,5 @@
   ;; Turning it off ensures we have full control.
   (setq company-auto-commit-chars nil)
   )
+
+(setq ispell-alternate-dictionary "/home/antas/.emacs.d/dict/english-words.txt")

@@ -24,9 +24,9 @@
 
        :completion
        company           ; the ultimate code completion backend
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       ;;ivy               ; a search engine for love and life
+       ;; helm              ; the *other* search engine for love and life
+       ;; ido               ; the other *other* search engine...
+       ;; ivy               ; a search engine for love and life
        vertico           ; the search engine of the future
 
        :ui
@@ -83,7 +83,7 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
+       (spell +flyspell) ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -134,7 +134,7 @@
        ;;ess               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
-       fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
+       (fortran +lsp)           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
        ;;fsharp            ; ML stands for Microsoft's Language
        ;;fstar             ; (dependent) types and (monadic) effects and Z3
        gdscript          ; the language you waited for
@@ -144,7 +144,7 @@
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
-      (java +lsp)       ; the poster child for carpal tunnel syndrome
+       (java +lsp)       ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
        julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -197,3 +197,6 @@
        (default +bindings +smartparens))
 
 (add-hook 'after-init-hook #'elcord-wsl--connect)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq good-scroll-mode 1)
+;; for some reason these don't configure in after! org
